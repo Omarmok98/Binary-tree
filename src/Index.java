@@ -1,4 +1,4 @@
-import java.io.FileNotFoundException;
+
 import java.io.IOException;
 import java.io.RandomAccessFile;
 
@@ -188,7 +188,27 @@ public class Index {
 
 	static void TraverseBinarySearchTreeInOrder(String filename) throws IOException {
 		RandomAccessFile index = new RandomAccessFile(filename, "r");
+		Node cur = new Node();
+		inOrder(index,cur,16);
+
 		index.close();
+	}
+	static void inOrder(RandomAccessFile f,Node cur,int offset) throws IOException
+	{
+		
+		f.seek(offset);
+		cur=readNode(f);
+		
+		if(cur.getLeft() == 0 || cur.getLeft() == -1) {
+			System.out.println(cur.getValue());
+			return;
+		}
+		inOrder(f,cur,cur.getLeft()*16);
+		System.out.println(cur.getValue());
+		if(cur.getRight() == 0 || cur.getRight() == -1) {
+			return;
+		}
+		inOrder(f,cur,cur.getRight()*16);
 	}
 
 	static void DisplayIndexFileContent(String filename) throws IOException {
